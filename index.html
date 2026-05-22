@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>A História Contada Através do Corpo - One Piece Edition</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,6 @@
       --op-red-dark: #b71c1c;
       --op-gold: #FFD700;
       --op-gold-dim: #b8860b;
-      --op-blue: #00BFFF; /* Azul para o botão */
       --op-parchment: #f4e4bc;
       --op-wood: #5d4037;
       --op-text: #eceff1;
@@ -33,7 +32,6 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      -webkit-tap-highlight-color: transparent;
     }
 
     html {
@@ -42,7 +40,7 @@
 
     body {
       font-family: 'Inter', sans-serif;
-      background: var(--op-deep-sea);
+      background: var(--op-deep-sea); /* Fundo Escuro Original */
       color: var(--op-text);
       overflow-x: hidden;
       line-height: 1.6;
@@ -59,6 +57,7 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
+      /* Filtro Original */
       filter: sepia(0.1) contrast(1.1) brightness(0.5); 
     }
 
@@ -66,6 +65,7 @@
       position: fixed;
       inset: 0;
       z-index: -1;
+      /* Overlay Original */
       background: radial-gradient(circle at center, transparent 0%, rgba(5, 10, 20, 0.8) 100%);
       pointer-events: none;
     }
@@ -279,7 +279,19 @@
     }
     .hero-title { padding-left: 40px; }
 
-    /* --- MUSIC PLAYER (AZUL E VERMELHO) --- */
+    @media (max-width: 768px) {
+      .hero-hat-img {
+        width: 140px; top: -10px; left: -30px;
+        transform: rotate(-25deg) scale(0.8);
+      }
+      .hero-title { padding-left: 10px; }
+    }
+
+    .intro-character { bottom: -20px; right: -30px; width: 200px; --rot: 5deg; }
+    .evo-character { top: -50px; left: -20px; width: 250px; --rot: -10deg; z-index: 20; }
+    .culture-character { top: 10%; left: 5%; width: 150px; opacity: 0.4; --rot: 15deg; }
+
+    /* --- MUSIC PLAYER (Original Theme) --- */
     .music-control {
       position: fixed;
       bottom: 30px;
@@ -287,11 +299,10 @@
       z-index: 1000;
       width: 60px;
       height: 60px;
-      /* Gradiente Diagonal Azul e Vermelho */
-      background: linear-gradient(135deg, var(--op-red) 50%, var(--op-blue) 50%);
+      background: rgba(13, 27, 51, 0.8);
       border: 3px solid var(--op-gold);
       border-radius: 50%;
-      box-shadow: 0 5px 20px rgba(0, 191, 255, 0.3), 0 0 15px rgba(211, 47, 47, 0.3);
+      box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
       cursor: pointer;
       display: flex;
       align-items: center;
@@ -302,14 +313,14 @@
 
     .music-control:hover {
       transform: scale(1.1);
-      box-shadow: 0 0 30px var(--op-gold);
+      box-shadow: 0 0 25px var(--op-gold);
     }
     
     .music-control.playing {
-      animation: pulse-music 2s infinite;
+      animation: pulse-gold 2s infinite;
     }
 
-    @keyframes pulse-music {
+    @keyframes pulse-gold {
       0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
       70% { box-shadow: 0 0 0 15px rgba(255, 215, 0, 0); }
       100% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0); }
@@ -318,9 +329,8 @@
     .music-icon {
       width: 30px;
       height: 30px;
-      fill: #fff; /* Ícone branco para contraste */
+      fill: var(--op-gold);
       transition: opacity 0.3s;
-      filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
     }
     
     .music-control.paused .icon-pause { opacity: 0; display: none; }
@@ -493,12 +503,12 @@
     @keyframes fadeIn { to { opacity: 1; } }
 
     /* Sections Common */
-    .section { padding: 8rem 2rem; position: relative; }
+    .section { padding: 10rem 2rem; position: relative; }
     .container { max-width: 1300px; margin: 0 auto; position: relative; }
 
     .section-header {
       text-align: center;
-      margin-bottom: 5rem;
+      margin-bottom: 6rem;
       position: relative;
     }
 
@@ -526,7 +536,7 @@
 
     .section-title {
       font-family: 'IM Fell English', serif;
-      font-size: clamp(2rem, 5vw, 4rem);
+      font-size: clamp(2.5rem, 6vw, 4rem);
       font-weight: 400;
       line-height: 1.1;
       margin-bottom: 1.5rem;
@@ -958,14 +968,14 @@
     /* Conclusion */
     .conclusion {
       text-align: center;
-      padding: 8rem 2rem;
+      padding: 12rem 2rem;
       background: 
         radial-gradient(circle at center, rgba(211, 47, 47, 0.1) 0%, transparent 70%);
     }
 
     .conclusion-quote {
       font-family: 'IM Fell English', serif;
-      font-size: clamp(1.2rem, 3vw, 2.5rem);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
       font-style: italic;
       color: var(--op-text);
       margin-bottom: 2rem;
@@ -982,7 +992,7 @@
     .team-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
-      gap: 2rem;
+      gap: 4rem;
       justify-items: center; 
     }
     @media (min-width: 700px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
@@ -998,8 +1008,6 @@
       font-family: 'Impact', sans-serif;
       overflow: hidden;
       transform: rotate(-2deg);
-      width: 100%;
-      max-width: 350px; /* Limite de largura para não estourar */
     }
 
     .team-card:nth-child(even) { transform: rotate(2deg); }
@@ -1020,7 +1028,7 @@
     }
 
     .wanted-header h3 {
-      font-size: 2.5rem; /* Reduzido para mobile */
+      font-size: 3.5rem;
       font-weight: 900;
       margin: 0;
       line-height: 0.9;
@@ -1032,7 +1040,7 @@
 
     .wanted-sub {
       font-family: 'Cinzel', serif;
-      font-size: 0.6rem; /* Reduzido */
+      font-size: 0.8rem;
       text-transform: uppercase;
       font-weight: 900;
       letter-spacing: 1px;
@@ -1044,17 +1052,17 @@
     }
 
     .team-poster-body {
-      padding: 1rem; /* Padding ajustado */
+      padding: 1.5rem;
       text-align: center;
     }
 
     .team-avatar {
       width: 100%;
-      max-width: 220px; /* Imagem menor em telas pequenas */
+      max-width: 260px;
       aspect-ratio: 3/4;
-      margin: 0 auto 1rem;
+      margin: 0 auto 1.5rem;
       background: #fff;
-      padding: 5px;
+      padding: 8px;
       border: 2px solid #000;
       box-shadow: 3px 3px 0 rgba(0,0,0,0.3);
       position: relative;
@@ -1070,7 +1078,7 @@
     }
 
     .team-card h4 {
-      font-size: 1.8rem; /* Nome menor */
+      font-size: 2.5rem;
       font-weight: 900;
       margin-bottom: 0.2rem;
       text-transform: uppercase;
@@ -1081,19 +1089,19 @@
 
     .team-bounty {
       font-family: 'Cinzel', serif;
-      font-size: 1.5rem; /* Recompensa menor */
+      font-size: 2.2rem; 
       font-weight: 700;
       color: var(--op-red);
-      border-top: 3px solid #000;
-      border-bottom: 3px solid #000;
-      padding: 0.3rem 0;
-      margin-top: 1rem;
+      border-top: 4px solid #000;
+      border-bottom: 4px solid #000;
+      padding: 0.5rem 0;
+      margin-top: 1.5rem;
       display: block;
       text-shadow: 1px 1px 0 rgba(255,255,255,0.5);
       word-break: break-all; 
     }
     .bounty-label {
-      font-size: 0.6rem;
+      font-size: 0.8rem;
       text-transform: uppercase;
       color: #333;
       display: block;
@@ -1114,7 +1122,7 @@
       opacity: 0;
       visibility: hidden;
       transition: all 0.4s ease;
-      padding: 1rem;
+      padding: 2rem;
     }
     .lightbox.open { opacity: 1; visibility: visible; }
 
@@ -1125,7 +1133,6 @@
       padding: 1rem;
       background: var(--op-deep-sea);
       box-shadow: 0 0 50px rgba(255, 215, 0, 0.2);
-      width: 100%;
     }
 
     .lightbox-content img {
@@ -1137,14 +1144,14 @@
 
     .lightbox-title {
       font-family: 'Cinzel', serif;
-      font-size: 1.5rem;
+      font-size: 2rem;
       color: var(--op-gold);
       margin-bottom: 1rem;
     }
 
     .lightbox-text {
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.1rem;
       line-height: 1.6;
     }
 
@@ -1159,61 +1166,19 @@
     }
     .lightbox-close:hover { color: var(--op-red); transform: rotate(90deg); }
 
-    /* --- MOBILE PERFECT TWEAKS --- */
-    @media (max-width: 768px) {
-      .section { padding: 4rem 1.5rem; }
-      
-      /* Hero Ajustes */
-      .hero-hat-img {
-        width: 100px; 
-        top: -10px; 
-        left: -10px; 
-        transform: rotate(-25deg);
-        opacity: 0.8;
-      }
-      .hero-title { 
-        padding-left: 0; 
-        font-size: 2.5rem; /* Tamanho legível */
-        margin-top: 2rem;
-      }
-      .hero-subtitle { font-size: 1rem; padding: 0 1rem; }
+    @media (max-width: 600px) {
+      .section { padding: 6rem 1.5rem; }
       .hero-actions { flex-direction: column; width: 100%; }
-      .btn { width: 100%; justify-content: center; padding: 1rem; }
+      .btn { width: 100%; justify-content: center; }
       
-      /* Timeline Mobile */
       .timeline::before { left: 20px; }
       .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
-      .timeline-content { width: 100%; text-align: left !important; padding: 1rem; }
+      .timeline-content { width: 100%; text-align: left !important; }
       .timeline-dot { left: 20px; }
       
-      /* Team Cards Mobile */
+      .team-avatar { max-width: 180px; } 
       .team-grid { gap: 2rem; }
-      .wanted-header h3 { font-size: 2rem; }
-      .team-card h4 { font-size: 1.5rem; }
-      .team-bounty { font-size: 1.2rem; } /* Caber em telas pequenas */
-
-      /* Intro Text */
-      .intro-text p { text-align: left; font-size: 0.95rem; }
-      
-      /* Remove characters on mobile if they block view */
-      .intro-character, .evo-character, .culture-character { display: none; }
-      
-      /* Music Button Position */
-      .music-control {
-        bottom: 20px;
-        right: 20px;
-        width: 50px;
-        height: 50px;
-      }
-    }
-
-    @media (max-width: 480px) {
-      /* Ajustes finos para telas muito pequenas (iPhone SE) */
-      .team-card { max-width: 100%; }
-      .section-label::before, .section-label::after { width: 20px; }
-      .section-label { padding: 0 1rem; font-size: 0.6rem; }
-      .section-label::before { left: -20px; }
-      .section-label::after { right: -20px; }
+      .team-bounty { font-size: 1.8rem; } 
     }
   </style>
 </head>
@@ -1223,7 +1188,7 @@
     <source src="musica.mp3" type="audio/mpeg">
   </audio>
 
-  <!-- Music Button (Azul e Vermelho) -->
+  <!-- Music Button (Tema Original Ouro/Vermelho) -->
   <div class="music-control paused" id="musicBtn" title="Tocar/Pausar Música">
     <!-- Icon Play -->
     <svg class="music-icon icon-play" viewBox="0 0 24 24">
@@ -1862,6 +1827,7 @@
       }
       progressBar.style.width = progress + '%';
       
+      // Atualizar status baseado no progresso
       if(progress < 30) loaderStatus.innerText = "Iniciando sistemas...";
       else if(progress < 60) loaderStatus.innerText = "Carregando assets...";
       else if(progress < 90) loaderStatus.innerText = "Finalizando...";
