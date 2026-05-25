@@ -2,14 +2,20 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Viewport fixo para garantir que o navegador não tente "ajudar" a redimensionar -->
+  <meta name="viewport" content="width=1200, initial-scale=1.0">
   <title>A História Contada Através do Corpo - One Piece Edition</title>
+  
+  <!-- Importação das Fontes -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+  
   <style>
+    /* ==========================================================================
+       VARIÁVEIS GLOBAIS (TEMA ONE PIECE)
+       ========================================================================== */
     :root {
-      /* Paleta One Piece / Pirata */
       --op-deep-sea: #050a14;
       --op-ocean: #0d1b33;
       --op-red: #D32F2F;
@@ -20,26 +26,96 @@
       --op-wood: #5d4037;
       --op-text: #eceff1;
       --op-text-muted: #b0bec5;
-      
       --glass-bg: rgba(13, 27, 51, 0.7);
       --glass-border: rgba(211, 47, 47, 0.2);
-      
       --gradient-gold: linear-gradient(135deg, #FFD700 0%, #FFA000 100%);
       --gradient-red: linear-gradient(135deg, #ff5252 0%, #d32f2f 100%);
     }
 
+    /* ==========================================================================
+       RESET E BASE
+       ========================================================================== */
     * { margin: 0; padding: 0; box-sizing: border-box; }
+    
     html { scroll-behavior: smooth; }
 
     body {
       font-family: 'Inter', sans-serif;
       background: var(--op-deep-sea);
       color: var(--op-text);
-      overflow-x: hidden;
+      overflow-x: auto; /* Permite rolagem horizontal se a tela for pequena */
       line-height: 1.6;
+      /* Força largura mínima para manter layout de PC */
+      min-width: 1200px; 
     }
 
-    /* Global Video Background */
+    /* ==========================================================================
+       BLOQUEADOR MOBILE (Tela de Aviso)
+       ========================================================================== */
+    .mobile-blocker {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 999999; /* Z-Index absurdamente alto para garantir fique acima de tudo */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      background-image: radial-gradient(circle at center, #1a237e 0%, #000 100%);
+    }
+
+    .blocker-content h1 {
+      font-family: 'Cinzel', serif;
+      font-size: 2.5rem;
+      color: var(--op-red);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    .blocker-content p {
+      font-family: 'Inter', sans-serif;
+      color: var(--op-text-muted);
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      max-width: 600px;
+    }
+
+    .blocker-btn {
+      padding: 1rem 2rem;
+      background: var(--op-gold);
+      color: var(--op-deep-sea);
+      border: none;
+      font-family: 'Cinzel', serif;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      border-radius: 2px;
+      box-shadow: 0 0 15px var(--op-gold);
+      transition: transform 0.3s;
+    }
+    .blocker-btn:hover { transform: scale(1.05); }
+
+    /* Lógica de Exibição: Mostra aviso em telas menores que 1024px, esconde em telas maiores */
+    @media (min-width: 1024px) {
+      .mobile-blocker { display: none !important; }
+    }
+    @media (max-width: 1023px) {
+      body { overflow: hidden; } /* Trava o scroll no mobile */
+      #main-content { display: none !important; } /* Esconde o site no mobile */
+    }
+
+    /* ==========================================================================
+       ESTILOS DO SITE (FIXO - LAYOUT DE PC)
+       ========================================================================== */
+    
+    /* Fundo Global */
     .global-bg { position: fixed; inset: 0; z-index: -2; }
     .global-bg video {
       width: 100%; height: 100%; object-fit: cover;
@@ -64,9 +140,8 @@
     .loader::after { animation-delay: -5s; background: rgba(211, 47, 47, 0.03); }
     @keyframes wave { 0% { transform: translate(-30%, -30%) rotate(0deg); } 100% { transform: translate(-30%, -30%) rotate(360deg); } }
     .loader.hidden { opacity: 0; visibility: hidden; }
-
     .compass-loader {
-      width: 120px; height: 120px; border: 6px solid rgba(255, 215, 0, 0.3); border-top: 6px solid var(--op-gold);
+      width: 150px; height: 150px; border: 6px solid rgba(255, 215, 0, 0.3); border-top: 6px solid var(--op-gold);
       border-radius: 50%; position: relative; background: rgba(0, 0, 0, 0.3);
       box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); display: flex; align-items: center; justify-content: center;
       margin-bottom: 2rem; animation: spin 3s linear infinite;
@@ -88,7 +163,6 @@
     }
     @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.5); opacity: 0.7; } 100% { transform: scale(1); opacity: 1; } }
     @keyframes spin { to { transform: rotate(360deg); } }
-
     .loader-text {
       font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700; color: var(--op-gold);
       letter-spacing: 0.1em; text-transform: uppercase; min-height: 2rem; text-align: center;
@@ -116,9 +190,13 @@
       position: absolute; background: var(--op-gold); border-radius: 50%; opacity: 0;
       animation: float 15s ease-in-out infinite;
     }
-    @keyframes float { 0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; } 10% { opacity: 0.8; } 90% { opacity: 0.8; } 100% { transform: translateY(-10vh) scale(1); opacity: 0; } }
+    @keyframes float {
+      0%, 100% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.8; } 90% { opacity: 0.8; }
+      100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+    }
 
-    /* --- DECORAÇÕES --- */
+    /* DECORAÇÕES */
     .decoration-container { position: relative; overflow: visible; }
     .character-decoration {
       position: absolute; z-index: 10; pointer-events: none; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.6));
@@ -128,7 +206,6 @@
     .float-medium { animation: floatAnim 4s ease-in-out infinite; }
     .float-fast { animation: floatAnim 3s ease-in-out infinite; }
     @keyframes floatAnim { 0%, 100% { transform: translateY(0) rotate(var(--rot, 0deg)); } 50% { transform: translateY(-15px) rotate(var(--rot, 0deg)); } }
-
     .hero-hat-img {
       position: absolute; top: -30px; left: -50px; width: 220px; z-index: 20;
       filter: drop-shadow(5px 10px 15px rgba(0,0,0,0.8)); transform: rotate(-25deg); transition: transform 0.3s ease;
@@ -138,7 +215,7 @@
     .evo-character { top: -50px; left: -20px; width: 250px; --rot: -10deg; z-index: 20; }
     .culture-character { top: 10%; left: 5%; width: 150px; opacity: 0.4; --rot: 15deg; }
 
-    /* --- MUSIC PLAYER --- */
+    /* MUSIC PLAYER */
     .music-control {
       position: fixed; bottom: 30px; right: 30px; z-index: 1000; width: 60px; height: 60px;
       background: rgba(13, 27, 51, 0.8); border: 3px solid var(--op-gold); border-radius: 50%;
@@ -152,7 +229,7 @@
     .music-control.paused .icon-pause { opacity: 0; display: none; }
     .music-control.playing .icon-play { opacity: 0; display: none; }
 
-    /* --- Hero Section --- */
+    /* HERO SECTION */
     .hero { min-height: 100vh; display: flex; align-items: center; justify-content: center; position: relative; padding: 2rem; }
     .hero-content { text-align: center; max-width: 1100px; position: relative; z-index: 10; }
     .hero-badge {
@@ -166,7 +243,7 @@
     .hero-title {
       font-family: 'IM Fell English', serif; font-size: clamp(3.5rem, 12vw, 7rem); font-weight: 400; line-height: 1.1;
       margin-bottom: 1.5rem; color: #fff; text-shadow: 2px 2px 0px #000, 0 0 20px rgba(211, 47, 47, 0.5);
-      opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease forwards 0.7s; position: relative;
+      opacity: 0; transform: translateY(30px); animation: fadeInUp 1s ease forwards 0.7s; position: relative; 
     }
     .hero-title em { font-style: italic; color: var(--op-gold); text-shadow: 2px 2px 0px #000, 0 0 30px rgba(255, 215, 0, 0.6); }
     .hero-subtitle {
@@ -196,7 +273,7 @@
     @keyframes fadeInUp { to { opacity: 1; transform: translateY(0); } }
     @keyframes fadeIn { to { opacity: 1; } }
 
-    /* Sections Common */
+    /* SEÇÕES */
     .section { padding: 10rem 2rem; position: relative; }
     .container { max-width: 1300px; margin: 0 auto; position: relative; }
     .section-header { text-align: center; margin-bottom: 6rem; position: relative; }
@@ -213,21 +290,20 @@
     .section-title em { font-style: italic; color: var(--op-red); }
     .section-desc { font-size: 1.125rem; color: var(--op-text-muted); max-width: 700px; margin: 0 auto; line-height: 1.9; }
 
-    /* Reveal Animation */
+    /* Reveal */
     .reveal { opacity: 0; transform: translateY(50px); transition: all 1s cubic-bezier(0.25, 0.46, 0.45, 0.94); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
     .reveal-delay-1 { transition-delay: 0.1s; } .reveal-delay-2 { transition-delay: 0.2s; } .reveal-delay-3 { transition-delay: 0.3s; }
 
-    /* --- INTRODUÇÃO & LOG POSE --- */
-    .intro-grid { display: grid; grid-template-columns: 1fr; gap: 4rem; align-items: center; }
-    @media (min-width: 900px) { .intro-grid { grid-template-columns: 1.1fr 0.9fr; } }
+    /* INTRODUÇÃO */
+    .intro-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 4rem; align-items: center; }
     .intro-text h3 { font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: 1.25rem; color: var(--op-gold); border-bottom: 1px solid var(--op-red); display: inline-block; padding-bottom: 0.5rem; }
     .intro-text p { color: var(--op-text-muted); line-height: 1.9; margin-bottom: 1.25rem; font-size: 1rem; text-align: justify; }
     .intro-visual { position: relative; aspect-ratio: 1; max-width: 450px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
     .log-pose-img { width: 100%; max-width: 320px; height: auto; filter: drop-shadow(0 0 20px rgba(0,0,0,0.5)); animation: floatWobble 4s ease-in-out infinite alternate; }
     @keyframes floatWobble { 0% { transform: rotate(-5deg) translateY(0); } 100% { transform: rotate(5deg) translateY(-10px); } }
 
-    /* --- TIMELINE --- */
+    /* TIMELINE (Centralizada - PC Only) */
     .timeline { position: relative; margin-top: 5rem; padding: 2rem 0; }
     .timeline::before {
       content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 3px;
@@ -252,7 +328,7 @@
     .timeline-year { font-family: 'Cinzel', serif; font-size: 1.5rem; font-weight: 700; color: var(--op-gold); }
     .timeline-label { font-size: 0.9rem; color: var(--op-text-muted); text-transform: uppercase; letter-spacing: 1px; }
 
-    /* Evolution */
+    /* EVOLUÇÃO (Scroll Horizontal) */
     .evolution-wrapper { position: relative; }
     .evolution-wrapper::before, .evolution-wrapper::after {
       content: ''; position: absolute; top: 0; bottom: 0; width: 100px; z-index: 10; pointer-events: none;
@@ -277,13 +353,9 @@
     .evolution-period { font-size: 0.7rem; font-weight: 700; color: var(--op-red); text-transform: uppercase; margin-bottom: 1rem; display: block; }
     .evolution-card p { font-size: 0.9rem; color: var(--op-text-muted); line-height: 1.6; }
 
-    /* Culture */
-    .culture-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
-    @media (min-width: 768px) { .culture-grid { grid-template-columns: repeat(3, 1fr); } }
-    .culture-card {
-      background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 4px; overflow: hidden;
-      position: relative; transition: all 0.4s ease; cursor: pointer;
-    }
+    /* CULTURA (Grid Fixo 3 Colunas) */
+    .culture-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .culture-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 4px; overflow: hidden; position: relative; transition: all 0.4s ease; cursor: pointer; }
     .culture-card:hover { border-color: var(--op-gold); transform: translateY(-5px); }
     .culture-image { aspect-ratio: 4/3; position: relative; }
     .culture-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.6s ease; filter: sepia(0.3); }
@@ -294,10 +366,8 @@
     .culture-card h4 { font-family: 'Cinzel', serif; font-size: 1.2rem; color: #fff; margin-bottom: 0.5rem; }
     .culture-card p { font-size: 0.85rem; color: var(--op-text-muted); }
 
-    /* Communication */
-    .comm-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-    @media (min-width: 600px) { .comm-grid { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1000px) { .comm-grid { grid-template-columns: repeat(4, 1fr); } }
+    /* COMUNICAÇÃO (Grid Fixo 4 Colunas) */
+    .comm-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
     .comm-card {
       background: rgba(211, 47, 47, 0.05); border: 1px solid rgba(211, 47, 47, 0.2); padding: 2rem;
       text-align: center; transition: all 0.4s ease; position: relative;
@@ -307,9 +377,8 @@
     .comm-card h4 { font-family: 'Cinzel', serif; font-size: 1.2rem; margin-bottom: 1rem; color: #fff; }
     .comm-stat-value { font-family: 'Cinzel', serif; font-size: 2.5rem; color: var(--op-gold); text-shadow: 0 0 10px rgba(255, 215, 0, 0.3); }
 
-    /* Impact */
-    .impact-grid { display: grid; grid-template-columns: 1fr; gap: 2rem; }
-    @media (min-width: 800px) { .impact-grid { grid-template-columns: repeat(2, 1fr); } }
+    /* IMPACTO (Grid Fixo 2 Colunas) */
+    .impact-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; }
     .impact-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 4px; overflow: hidden; display: flex; flex-direction: column; transition: 0.4s; }
     .impact-card:hover { border-color: var(--op-gold); }
     .impact-image { height: 200px; position: relative; }
@@ -321,47 +390,17 @@
     .impact-card h4 { font-family: 'Cinzel', serif; font-size: 1.4rem; }
     .impact-tag { font-size: 0.7rem; background: rgba(255, 215, 0, 0.1); color: var(--op-gold); padding: 0.3rem 0.8rem; border: 1px solid var(--op-gold); margin-right: 0.5rem; }
 
-    /* Conclusion */
+    /* CONCLUSÃO */
     .conclusion { text-align: center; padding: 12rem 2rem; background: radial-gradient(circle at center, rgba(211, 47, 47, 0.1) 0%, transparent 70%); }
     .conclusion-quote { font-family: 'IM Fell English', serif; font-size: clamp(1.5rem, 4vw, 2.5rem); font-style: italic; color: var(--op-text); margin-bottom: 2rem; }
     .conclusion-divider { width: 100px; height: 3px; background: var(--op-red); margin: 2rem auto; }
 
-    /* --- TEAM - WANTED POSTERS --- */
-    .team-grid {
-      display: grid; grid-template-columns: repeat(3, 1fr); /* PC Padrão: 3 Colunas */
-      gap: 2rem; justify-items: center;
-    }
-    
-    @media (max-width: 600px) {
-        /* Forçar 3 Colunas no Mobile conforme pedido */
-        .team-grid { 
-            grid-template-columns: repeat(3, 1fr) !important; 
-            gap: 0.5rem; /* Reduzir gap para caber */
-        }
-
-        /* Ajustar o cartaz para caber na coluna estreita */
-        .team-card {
-            width: 100%;
-            max-width: 100%; /* Remove limite para ocupar a célula */
-            transform: scale(0.85) rotate(var(--rot, 0deg)); /* Escala para baixo para caber tudo */
-        }
-        .team-card:hover { transform: scale(0.9) rotate(0); }
-
-        /* Reduzir fontes para não estourar o cartaz menor */
-        .wanted-header h3 { font-size: 2rem; line-height: 0.8; }
-        .wanted-sub { font-size: 0.5rem; padding: 1px 0; }
-        .team-poster-body { padding: 0.2rem; }
-        .team-avatar { margin-bottom: 0.2rem; padding: 2px; }
-        .team-card h4 { font-size: 0.9rem; margin-bottom: 0.1rem; }
-        .bounty-label { font-size: 0.5rem; }
-        .team-bounty { font-size: 0.8rem; margin-top: 0.2rem; padding: 0.2rem 0; border-width: 2px; }
-    }
-
+    /* EQUIPE (Grid Fixo 3 Colunas) */
+    .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; justify-items: center; }
     .team-card {
       background-color: var(--op-parchment); border: 2px solid #000; color: #000; padding: 0;
       position: relative; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease;
-      font-family: 'Impact', sans-serif; overflow: hidden; transform: rotate(-2deg);
-      max-width: 320px; /* Limite para PC */
+      font-family: 'Impact', sans-serif; overflow: hidden; transform: rotate(-2deg); width: 100%; max-width: 320px;
     }
     .team-card:nth-child(even) { transform: rotate(2deg); }
     .team-card:hover { transform: scale(1.05) rotate(0); z-index: 5; box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
@@ -369,10 +408,7 @@
     .wanted-header h3 { font-size: 3.5rem; font-weight: 900; margin: 0; line-height: 0.9; letter-spacing: 2px; text-transform: uppercase; text-shadow: 2px 2px 0 #000; font-family: 'Cinzel', serif; }
     .wanted-sub { font-family: 'Cinzel', serif; font-size: 0.8rem; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; margin-top: 5px; display: block; background: #000; color: #fff; padding: 2px 0; }
     .team-poster-body { padding: 1.5rem; text-align: center; }
-    .team-avatar {
-      width: 100%; max-width: 260px; aspect-ratio: 3/4; margin: 0 auto 1.5rem; background: #fff;
-      padding: 8px; border: 2px solid #000; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); position: relative;
-    }
+    .team-avatar { width: 100%; max-width: 260px; aspect-ratio: 3/4; margin: 0 auto 1.5rem; background: #fff; padding: 8px; border: 2px solid #000; box-shadow: 3px 3px 0 rgba(0,0,0,0.3); position: relative; }
     .team-avatar img { width: 100%; height: 100%; object-fit: cover; filter: sepia(0.2) contrast(1.1); display: block; border: 1px solid #ddd; }
     .team-card h4 { font-size: 2.5rem; font-weight: 900; margin-bottom: 0.2rem; text-transform: uppercase; color: #000; line-height: 1; text-shadow: 1px 1px 0 rgba(0,0,0,0.2); }
     .team-bounty {
@@ -382,7 +418,7 @@
     }
     .bounty-label { font-size: 0.8rem; text-transform: uppercase; color: #333; display: block; margin-bottom: 2px; font-weight: 900; letter-spacing: 1px; }
 
-    /* Lightbox */
+    /* LIGHTBOX */
     .lightbox { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.95); z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.4s ease; padding: 2rem; }
     .lightbox.open { opacity: 1; visibility: visible; }
     .lightbox-content { max-width: 900px; text-align: center; border: 4px solid var(--op-gold); padding: 1rem; background: var(--op-deep-sea); box-shadow: 0 0 50px rgba(255, 215, 0, 0.2); }
@@ -391,218 +427,223 @@
     .lightbox-text { color: #fff; font-size: 1.1rem; line-height: 1.6; }
     .lightbox-close { position: absolute; top: 2rem; right: 2rem; font-size: 3rem; color: var(--op-gold); cursor: pointer; transition: 0.3s; }
     .lightbox-close:hover { color: var(--op-red); transform: rotate(90deg); }
-
-    /* Outros ajustes mobile gerais */
-    @media (max-width: 768px) {
-      .section { padding: 6rem 1.5rem; }
-      .hero-hat-img { width: 140px; top: -10px; left: -30px; transform: rotate(-25deg) scale(0.8); }
-      .hero-title { padding-left: 10px; }
-      .hero-actions { flex-direction: column; width: 100%; }
-      .btn { width: 100%; justify-content: center; }
-      
-      /* Timeline: Volta à esquerda para leitura no mobile (exceto equipe que é 3 colunas) */
-      .timeline::before { left: 20px; }
-      .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
-      .timeline-content { width: 100%; text-align: left !important; }
-      .timeline-dot { left: 20px; }
-    }
   </style>
 </head>
 <body>
-  <!-- Audio Element - ARQUIVO CORRETO: liberation.mp4 -->
+  
+  <!-- BLOQUEADOR MOBILE (Aparece apenas se a tela for pequena) -->
+  <div class="mobile-blocker" id="mobileBlocker">
+    <div class="blocker-content">
+      <h1>Atenção Navegante</h1>
+      <p>Este mapa do Grand Line foi desenhado para o formato de Computador.</p>
+      <p>Por favor, acesse este site através de um Desktop PC ou gire seu dispositivo para a paisagem e use o "Modo PC" do navegador.</p>
+      <button class="blocker-btn" onclick="forceEntry()">Entrar por conta e risco (Pode ficar feio)</button>
+    </div>
+  </div>
+
+  <!-- Áudio: liberation.mp4 -->
   <audio id="bgMusic" loop>
     <source src="liberation.mp4" type="audio/mp4">
   </audio>
 
-  <!-- Music Button -->
+  <!-- Botão de Música -->
   <div class="music-control paused" id="musicBtn" title="Tocar/Pausar Música">
     <svg class="music-icon icon-play" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
     <svg class="music-icon icon-pause" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
   </div>
 
-  <!-- Global Background -->
-  <div class="global-bg">
-    <video id="heroVideo" autoplay muted loop playsinline preload="auto">
-      <source src="fundo.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div class="global-overlay"></div>
-
-  <!-- Loader -->
-  <div class="loader" id="loader">
-    <div class="compass-loader">
-      <div class="compass-rose"></div>
-      <div class="compass-star"></div>
+  <!-- CONTEÚDO PRINCIPAL (Esccondido no Mobile) -->
+  <div id="main-content">
+    <div class="global-bg">
+      <video id="heroVideo" autoplay muted loop playsinline preload="auto">
+        <source src="fundo.mp4" type="video/mp4">
+      </video>
     </div>
-    <div class="loader-text" id="loaderText">PREPARANDO A VIAGEM</div>
-    <div class="loader-status" id="loaderStatus">Iniciando sistemas...</div>
-    <div class="loader-progress">
-      <div class="loader-progress-bar" id="progressBar"></div>
-    </div>
-  </div>
+    <div class="global-overlay"></div>
 
-  <!-- Particles -->
-  <div class="particles" id="particles"></div>
-
-  <!-- Hero Section -->
-  <section class="hero" id="hero">
-    <div class="hero-content decoration-container">
-      <img src="chapeu.png" class="hero-hat-img" alt="Chapéu de Palha">
-      <div class="hero-badge">
-        <div class="hero-badge-dot"></div>
-        <span>Uma Jornada pelo Grand Line Humano</span>
+    <!-- Loader -->
+    <div class="loader" id="loader">
+      <div class="compass-loader">
+        <div class="compass-rose"></div>
+        <div class="compass-star"></div>
       </div>
-      <h1 class="hero-title">A historia contada atraves do <em>corpo</em></h1>
-      <p class="hero-subtitle">Como o corpo humano evoluiu, adaptou-se e tornou-se o mapa da nossa própria existência, desde os mares primordiais até a era digital.</p>
-      <div class="hero-actions">
-        <a href="#introducao" class="btn btn-primary">Zarpar <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
-        <a href="#equipe" class="btn btn-secondary">Tripulação</a>
+      <div class="loader-text" id="loaderText">PREPARANDO A VIAGEM</div>
+      <div class="loader-status" id="loaderStatus">Iniciando sistemas...</div>
+      <div class="loader-progress">
+        <div class="loader-progress-bar" id="progressBar"></div>
       </div>
     </div>
-    <div class="scroll-hint"><span>Role para descobrir</span><div class="scroll-line"></div></div>
-  </section>
 
-  <!-- Introduction -->
-  <section class="section" id="introducao">
-    <div class="container decoration-container">
-      <img src="chopper.png" class="character-decoration intro-character float-medium" alt="Personagem">
-      <div class="section-header reveal">
-        <div class="section-label">O Início da Jornada</div>
-        <h2 class="section-title">O corpo como <em>mapa vivo</em></h2>
-        <p class="section-desc">Assim como os piratas buscam o One Piece, humanos buscam significado em suas próprias marcas, gestos e formas através dos séculos.</p>
-      </div>
-      <div class="intro-grid">
-        <div class="intro-text reveal reveal-delay-1">
-          <h3>O Tesouro da Origem</h3>
-          <p>Antes das bússolas e mapas, nossos ancestrais usavam o próprio corpo como ferramenta de navegação e comunicação. Pinturas, cicatrizes e adornos não eram apenas estética, eram a escrita de uma história que ainda não havia papel.</p>
-          <p>A postura ereta foi a primeira grande invenção da humanidade, liberando as mãos para criar ferramentas e sinais, moldando nosso destino evolutivo.</p>
-          <h3 style="margin-top: 2.5rem;">Marcas de Passagem</h3>
-          <p>Cada cultura, como um império diferente no Novo Mundo, desenvolveu seus símbolos. Tatuagens tribais e modificações corporais agem como as Jolly Rogers: identificam quem somos, de onde viemos e o que valorizamos.</p>
+    <!-- Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Hero Section -->
+    <section class="hero" id="hero">
+      <div class="hero-content decoration-container">
+        <img src="chapeu.png" class="hero-hat-img" alt="Chapéu de Palha">
+        <div class="hero-badge">
+          <div class="hero-badge-dot"></div>
+          <span>Uma Jornada pelo Grand Line Humano</span>
         </div>
-        <div class="intro-visual reveal reveal-delay-2">
-          <img src="logpose.png" class="log-pose-img" alt="Log Pose">
+        <h1 class="hero-title">A historia contada atraves do <em>corpo</em></h1>
+        <p class="hero-subtitle">Como o corpo humano evoluiu, adaptou-se e tornou-se o mapa da nossa própria existência, desde os mares primordiais até a era digital.</p>
+        <div class="hero-actions">
+          <a href="#introducao" class="btn btn-primary">Zarpar <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></a>
+          <a href="#equipe" class="btn btn-secondary">Tripulação</a>
         </div>
       </div>
-      <div class="timeline reveal reveal-delay-3" style="position: relative;">
-        <div class="timeline-items">
-          <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">2M a.C.</div><div class="timeline-label">Os Primórdios</div></div><div class="timeline-dot"></div></div>
-          <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">300k a.C.</div><div class="timeline-label">O Surgimento do Sapiens</div></div><div class="timeline-dot"></div></div>
-          <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">40k a.C.</div><div class="timeline-label">Arte e Expressão</div></div><div class="timeline-dot"></div></div>
-          <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">Atual</div><div class="timeline-label">A Era Digital</div></div><div class="timeline-dot"></div></div>
+      <div class="scroll-hint"><span>Role para descobrir</span><div class="scroll-line"></div></div>
+    </section>
+
+    <!-- Introduction -->
+    <section class="section" id="introducao">
+      <div class="container decoration-container">
+        <img src="chopper.png" class="character-decoration intro-character float-medium" alt="Personagem">
+        <div class="section-header reveal">
+          <div class="section-label">O Início da Jornada</div>
+          <h2 class="section-title">O corpo como <em>mapa vivo</em></h2>
+          <p class="section-desc">Assim como os piratas buscam o One Piece, humanos buscam significado em suas próprias marcas, gestos e formas através dos séculos.</p>
+        </div>
+        <div class="intro-grid">
+          <div class="intro-text reveal reveal-delay-1">
+            <h3>O Tesouro da Origem</h3>
+            <p>Antes das bússolas e mapas, nossos ancestrais usavam o próprio corpo como ferramenta de navegação e comunicação. Pinturas, cicatrizes e adornos não eram apenas estética, eram a escrita de uma história que ainda não havia papel.</p>
+            <p>A postura ereta foi a primeira grande invenção da humanidade, liberando as mãos para criar ferramentas e sinais, moldando nosso destino evolutivo.</p>
+            <h3 style="margin-top: 2.5rem;">Marcas de Passagem</h3>
+            <p>Cada cultura, como um império diferente no Novo Mundo, desenvolveu seus símbolos. Tatuagens tribais e modificações corporais agem como as Jolly Rogers: identificam quem somos, de onde viemos e o que valorizamos.</p>
+          </div>
+          <div class="intro-visual reveal reveal-delay-2">
+            <img src="logpose.png" class="log-pose-img" alt="Log Pose">
+          </div>
+        </div>
+        <div class="timeline reveal reveal-delay-3" style="position: relative;">
+          <div class="timeline-items">
+            <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">2M a.C.</div><div class="timeline-label">Os Primórdios</div></div><div class="timeline-dot"></div></div>
+            <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">300k a.C.</div><div class="timeline-label">O Surgimento do Sapiens</div></div><div class="timeline-dot"></div></div>
+            <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">40k a.C.</div><div class="timeline-label">Arte e Expressão</div></div><div class="timeline-dot"></div></div>
+            <div class="timeline-item"><div class="timeline-content"><div class="timeline-year">Atual</div><div class="timeline-label">A Era Digital</div></div><div class="timeline-dot"></div></div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Evolution -->
-  <section class="section" id="evolucao">
-    <div class="container decoration-container">
-      <img src="gomu.png" class="character-decoration evo-character float-slow" alt="Personagem">
-      <div class="section-header reveal">
-        <div class="section-label">Diário de Bordo</div>
-        <h2 class="section-title">A transformação <em>física</em></h2>
-        <p class="section-desc">Registro das adaptações que moldaram a embarcação humana para sobreviver aos mares da evolução.</p>
-      </div>
-      <div class="evolution-wrapper reveal reveal-delay-1">
-        <div class="evolution-scroll" id="evolutionScroll">
-          <div class="evolution-card"><div class="evolution-image"><img src="https://www.nhm.ac.uk/content/dam/nhm-www/discover/ancient-foot/ancient-foot-australopithecus-afarensis-reconstruction-full-width-shutterstock.jpg" alt="Australopithecus" loading="lazy"></div><div class="evolution-content"><h4>Australopithecus</h4><span class="evolution-period">4-2 Milhões de Anos</span><p>O início da bipedia. Liberar as mãos foi o primeiro passo para segurar o futuro.</p></div></div>
-          <div class="evolution-card"><div class="evolution-image"><img src="https://humanjourney.us/wp-content/uploads/HomoHabilisHeader.jpg" alt="Homo Habilis" loading="lazy"></div><div class="evolution-content"><h4>Homo Habilis</h4><span class="evolution-period">2.4-1.4 Milhões de Anos</span><p>Mãos hábeis criaram as primeiras ferramentas. A inteligência prática desperta.</p></div></div>
-          <div class="evolution-card"><div class="evolution-image"><img src="https://aventurasnahistoria.com.br/wp-content/uploads/legacy/2018/08/13/homo-erectus-capa-1104812.png" alt="Homo Erectus" loading="lazy"></div><div class="evolution-content"><h4>Homo Erectus</h4><span class="evolution-period">1.9M - 110k Anos</span><p>Domínio do fogo e grandes navegações. O corpo se adapta a climas diversos.</p></div></div>
-          <div class="evolution-card"><div class="evolution-image"><img src="https://static.nationalgeographicbrasil.com/files/styles/image_3200/public/c0523194-neanderthalmodel.webp?w=1600&h=1067" alt="Homo Neanderthal" loading="lazy"></div><div class="evolution-content"><h4>Neanderthal</h4><span class="evolution-period">400-40 Mil Anos</span><p>Corpos robustos para o frio. Cultura rica e rituais simbólicos profundos.</p></div></div>
-          <div class="evolution-card"><div class="evolution-image"><img src="https://c.files.bbci.co.uk/EAEE/production/_110224106_mediaitem110224105.jpg" alt="Homo Sapiens" loading="lazy"></div><div class="evolution-content"><h4>Homo Sapiens</h4><span class="evolution-period">300k Anos - Presente</span><p>O navegador definitivo. Cérebro complexo, linguagem e arte.</p></div></div>
-          <div class="evolution-card"><div class="evolution-image"><img src="https://community.es/wp-content/uploads/lo-humano-maxima-tendencia-digital.jpg" alt="Humano Digital" loading="lazy"></div><div class="evolution-content"><h4>Humano Digital</h4><span class="evolution-period">Século XXI</span><p>A fusão com a tecnologia. Biohacking e a nova fronteira corporal.</p></div></div>
+    <!-- Evolution -->
+    <section class="section" id="evolucao">
+      <div class="container decoration-container">
+        <img src="gomu.png" class="character-decoration evo-character float-slow" alt="Personagem">
+        <div class="section-header reveal">
+          <div class="section-label">Diário de Bordo</div>
+          <h2 class="section-title">A transformação <em>física</em></h2>
+          <p class="section-desc">Registro das adaptações que moldaram a embarcação humana para sobreviver aos mares da evolução.</p>
+        </div>
+        <div class="evolution-wrapper reveal reveal-delay-1">
+          <div class="evolution-scroll" id="evolutionScroll">
+            <div class="evolution-card"><div class="evolution-image"><img src="https://www.nhm.ac.uk/content/dam/nhm-www/discover/ancient-foot/ancient-foot-australopithecus-afarensis-reconstruction-full-width-shutterstock.jpg" alt="Australopithecus" loading="lazy"></div><div class="evolution-content"><h4>Australopithecus</h4><span class="evolution-period">4-2 Milhões de Anos</span><p>O início da bipedia. Liberar as mãos foi o primeiro passo para segurar o futuro.</p></div></div>
+            <div class="evolution-card"><div class="evolution-image"><img src="https://humanjourney.us/wp-content/uploads/HomoHabilisHeader.jpg" alt="Homo Habilis" loading="lazy"></div><div class="evolution-content"><h4>Homo Habilis</h4><span class="evolution-period">2.4-1.4 Milhões de Anos</span><p>Mãos hábeis criaram as primeiras ferramentas. A inteligência prática desperta.</p></div></div>
+            <div class="evolution-card"><div class="evolution-image"><img src="https://aventurasnahistoria.com.br/wp-content/uploads/legacy/2018/08/13/homo-erectus-capa-1104812.png" alt="Homo Erectus" loading="lazy"></div><div class="evolution-content"><h4>Homo Erectus</h4><span class="evolution-period">1.9M - 110k Anos</span><p>Domínio do fogo e grandes navegações. O corpo se adapta a climas diversos.</p></div></div>
+            <div class="evolution-card"><div class="evolution-image"><img src="https://static.nationalgeographicbrasil.com/files/styles/image_3200/public/c0523194-neanderthalmodel.webp?w=1600&h=1067" alt="Homo Neanderthal" loading="lazy"></div><div class="evolution-content"><h4>Neanderthal</h4><span class="evolution-period">400-40 Mil Anos</span><p>Corpos robustos para o frio. Cultura rica e rituais simbólicos profundos.</p></div></div>
+            <div class="evolution-card"><div class="evolution-image"><img src="https://c.files.bbci.co.uk/EAEE/production/_110224106_mediaitem110224105.jpg" alt="Homo Sapiens" loading="lazy"></div><div class="evolution-content"><h4>Homo Sapiens</h4><span class="evolution-period">300k Anos - Presente</span><p>O navegador definitivo. Cérebro complexo, linguagem e arte.</p></div></div>
+            <div class="evolution-card"><div class="evolution-image"><img src="https://community.es/wp-content/uploads/lo-humano-maxima-tendencia-digital.jpg" alt="Humano Digital" loading="lazy"></div><div class="evolution-content"><h4>Humano Digital</h4><span class="evolution-period">Século XXI</span><p>A fusão com a tecnologia. Biohacking e a nova fronteira corporal.</p></div></div>
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Culture -->
-  <section class="section" id="cultura">
-    <div class="container decoration-container">
-      <img src="jr.png" class="character-decoration culture-character float-fast" alt="Personagem">
-      <div class="section-header reveal">
-        <div class="section-label">Cultura dos Mares</div>
-        <h2 class="section-title">Símbolos de <em>Identidade</em></h2>
-        <p class="section-desc">Assim como os piratas marcam seus navios e corpos, a humanidade usa o corpo como tela.</p>
+    <!-- Culture -->
+    <section class="section" id="cultura">
+      <div class="container decoration-container">
+        <img src="jr.png" class="character-decoration culture-character float-fast" alt="Personagem">
+        <div class="section-header reveal">
+          <div class="section-label">Cultura dos Mares</div>
+          <h2 class="section-title">Símbolos de <em>Identidade</em></h2>
+          <p class="section-desc">Assim como os piratas marcam seus navios e corpos, a humanidade usa o corpo como tela.</p>
+        </div>
+        <div class="culture-grid">
+          <div class="culture-card reveal reveal-delay-1"><div class="culture-image"><img src="https://criticalhits.com.br/wp-content/uploads/2024/05/3d2y.jpg" alt="Pinturas" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Guerra e Paz</span><h4>Pinturas Corporais</h4><p>Pigmentos naturais que contam histórias de batalhas e rituais sagrados.</p></div></div>
+          <div class="culture-card reveal reveal-delay-2"><div class="culture-image"><img src="https://pbs.twimg.com/media/F4aXmxiXoAA_ZA5.jpg" alt="Tatuagens" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Memória</span><h4>Tatuagens</h4><p>Histórias permanentes gravadas na pele, de tribos a marinheiros.</p></div></div>
+          <div class="culture-card reveal reveal-delay-3"><div class="culture-image"><img src="https://criticalhits.com.br/wp-content/uploads/2025/05/d4144-17485855013957-696x392.jpg" alt="Dancas" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Ritmo</span><h4>Danças Tradicionais</h4><p>A linguagem do movimento que preserva a alma de um povo.</p></div></div>
+          <div class="culture-card reveal reveal-delay-4"><div class="culture-image"><img src="https://i.redd.it/95k3lq0no5bc1.jpeg" alt="Vestimenta" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Status</span><h4>Vestimentas</h4><p>Tecidos que comunicam hierarquia, origem e pertencimento.</p></div></div>
+          <div class="culture-card reveal reveal-delay-5"><div class="culture-image"><img src="https://static.wikia.nocookie.net/onepiece/images/c/c8/Den_Den_Mushi_Infobox.png/revision/latest/scale-to-width-down/1200?cb=20240725230634&path-prefix=pt" alt="Gestos" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Sinais</span><h4>Linguagem Corporal</h4><p>A comunicação silenciosa que transcende qualquer idioma falado.</p></div></div>
+          <div class="culture-card reveal reveal-delay-6"><div class="culture-image"><img src="https://static.wikia.nocookie.net/onepiece/images/f/f3/Modified_Humans_Infobox.png/revision/latest?cb=20170120215105" alt="Modificacoes" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Transformação</span><h4>Modificações</h4><p>Rituais de passagem que alteram o corpo para marcar um novo ser.</p></div></div>
+        </div>
       </div>
-      <div class="culture-grid">
-        <div class="culture-card reveal reveal-delay-1"><div class="culture-image"><img src="https://criticalhits.com.br/wp-content/uploads/2024/05/3d2y.jpg" alt="Pinturas" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Guerra e Paz</span><h4>Pinturas Corporais</h4><p>Pigmentos naturais que contam histórias de batalhas e rituais sagrados.</p></div></div>
-        <div class="culture-card reveal reveal-delay-2"><div class="culture-image"><img src="https://pbs.twimg.com/media/F4aXmxiXoAA_ZA5.jpg" alt="Tatuagens" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Memória</span><h4>Tatuagens</h4><p>Histórias permanentes gravadas na pele, de tribos a marinheiros.</p></div></div>
-        <div class="culture-card reveal reveal-delay-3"><div class="culture-image"><img src="https://criticalhits.com.br/wp-content/uploads/2025/05/d4144-17485855013957-696x392.jpg" alt="Dancas" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Ritmo</span><h4>Danças Tradicionais</h4><p>A linguagem do movimento que preserva a alma de um povo.</p></div></div>
-        <div class="culture-card reveal reveal-delay-4"><div class="culture-image"><img src="https://i.redd.it/95k3lq0no5bc1.jpeg" alt="Vestimenta" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Status</span><h4>Vestimentas</h4><p>Tecidos que comunicam hierarquia, origem e pertencimento.</p></div></div>
-        <div class="culture-card reveal reveal-delay-5"><div class="culture-image"><img src="https://static.wikia.nocookie.net/onepiece/images/c/c8/Den_Den_Mushi_Infobox.png/revision/latest/scale-to-width-down/1200?cb=20240725230634&path-prefix=pt" alt="Gestos" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Sinais</span><h4>Linguagem Corporal</h4><p>A comunicação silenciosa que transcende qualquer idioma falado.</p></div></div>
-        <div class="culture-card reveal reveal-delay-6"><div class="culture-image"><img src="https://static.wikia.nocookie.net/onepiece/images/f/f3/Modified_Humans_Infobox.png/revision/latest?cb=20170120215105" alt="Modificacoes" loading="lazy"></div><div class="culture-content"><span class="culture-tag">Transformação</span><h4>Modificações</h4><p>Rituais de passagem que alteram o corpo para marcar um novo ser.</p></div></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Communication -->
-  <section class="section" id="comunicacao">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">Haki da Percepção</div>
-        <h2 class="section-title">A linguagem <em>invisível</em></h2>
-        <p class="section-desc">Ler o corpo é como ler o mar: requer observação atenta dos sinais sutis.</p>
+    <!-- Communication -->
+    <section class="section" id="comunicacao">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Haki da Percepção</div>
+          <h2 class="section-title">A linguagem <em>invisível</em></h2>
+          <p class="section-desc">Ler o corpo é como ler o mar: requer observação atenta dos sinais sutis.</p>
+        </div>
+        <div class="comm-grid">
+          <div class="comm-card reveal reveal-delay-1"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M3 21c0-4 3.5-8 9-8s9 4 9 8"/></svg></div><h4>Expressões</h4><p>Sete emoções universais escritas no rosto, independente da cultura.</p><div class="comm-stat"><div class="comm-stat-value">43</div><div class="comm-stat-label">Músculos Faciais</div></div></div>
+          <div class="comm-card reveal reveal-delay-2"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div><h4>Gestos</h4><p>Sinais que podem significar paz ou provocação, dependendo da ilha.</p><div class="comm-stat"><div class="comm-stat-value">5k+</div><div class="comm-stat-label">Gestos</div></div></div>
+          <div class="comm-card reveal reveal-delay-3"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Postura</h4><p>A posição do corpo revela dominância, medo ou confiança instantaneamente.</p><div class="comm-stat"><div class="comm-stat-value">55%</div><div class="comm-stat-label">Comunicação</div></div></div>
+          <div class="comm-card reveal reveal-delay-4"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Proximidade</h4><p>O território pessoal define as relações de poder e intimidade.</p><div class="comm-stat"><div class="comm-stat-value">4</div><div class="comm-stat-label">Zonas</div></div></div>
+        </div>
       </div>
-      <div class="comm-grid">
-        <div class="comm-card reveal reveal-delay-1"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M3 21c0-4 3.5-8 9-8s9 4 9 8"/></svg></div><h4>Expressões</h4><p>Sete emoções universais escritas no rosto, independente da cultura.</p><div class="comm-stat"><div class="comm-stat-value">43</div><div class="comm-stat-label">Músculos Faciais</div></div></div>
-        <div class="comm-card reveal reveal-delay-2"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/></svg></div><h4>Gestos</h4><p>Sinais que podem significar paz ou provocação, dependendo da ilha.</p><div class="comm-stat"><div class="comm-stat-value">5k+</div><div class="comm-stat-label">Gestos</div></div></div>
-        <div class="comm-card reveal reveal-delay-3"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Postura</h4><p>A posição do corpo revela dominância, medo ou confiança instantaneamente.</p><div class="comm-stat"><div class="comm-stat-value">55%</div><div class="comm-stat-label">Comunicação</div></div></div>
-        <div class="comm-card reveal reveal-delay-4"><div class="comm-icon"><svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div><h4>Proximidade</h4><p>O território pessoal define as relações de poder e intimidade.</p><div class="comm-stat"><div class="comm-stat-value">4</div><div class="comm-stat-label">Zonas</div></div></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Impact -->
-  <section class="section" id="impacto">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">Novo Mundo</div>
-        <h2 class="section-title">O corpo na era <em>Tecnológica</em></h2>
-        <p class="section-desc">Assim como a tecnologia de Vegapunk, o corpo humano agora se funde com o digital.</p>
+    <!-- Impact -->
+    <section class="section" id="impacto">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">Novo Mundo</div>
+          <h2 class="section-title">O corpo na era <em>Tecnológica</em></h2>
+          <p class="section-desc">Assim como a tecnologia de Vegapunk, o corpo humano agora se funde com o digital.</p>
+        </div>
+        <div class="impact-grid">
+          <div class="impact-card reveal reveal-delay-1"><div class="impact-image"><img src="https://i.ytimg.com/vi/fXaqdQGPEf8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDc4kzxxd-NpbhJhaCqfWZUITVynQ" alt="Redes" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h4>Redes Sociais</h4></div><p>O corpo como conteúdo digital. Filtros e algoritmos ditam novos padrões.</p><span class="impact-tag">Visibilidade</span><span class="impact-tag">Fama</span></div></div>
+          <div class="impact-card reveal reveal-delay-2"><div class="impact-image"><img src="https://i.redd.it/yrba07jo2wy81.jpg" alt="Beleza" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><h4>Diversidade</h4></div><p>Revolução contra os padrões únicos. O corpo como território de liberdade.</p><span class="impact-tag">Liberdade</span><span class="impact-tag">Autoestima</span></div></div>
+          <div class="impact-card reveal reveal-delay-3"><div class="impact-image"><img src="https://criticalhits.com.br/wp-content/uploads/2025/06/20240304-one-piece-vegapunk.webp" alt="Biohacking" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h4>Biohacking</h4></div><p>Implantes e melhorias tecnológicas. O corpo como projeto de engenharia.</p><span class="impact-tag">Evolução</span><span class="impact-tag">Poder</span></div></div>
+          <div class="impact-card reveal reveal-delay-4"><div class="impact-image"><img src="https://criticalhits.com.br/wp-content/uploads/2019/07/Screenshot_20180825-043637_YouTube.jpg" alt="Identidade" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div><h4>Identidade Fluida</h4></div><p>Além do binário. O corpo deixa de ser um destino fixo para se tornar uma escolha.</p><span class="impact-tag">Gênero</span><span class="impact-tag">Expressão</span></div></div>
+        </div>
       </div>
-      <div class="impact-grid">
-        <div class="impact-card reveal reveal-delay-1"><div class="impact-image"><img src="https://i.ytimg.com/vi/fXaqdQGPEf8/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLDc4kzxxd-NpbhJhaCqfWZUITVynQ" alt="Redes" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h4>Redes Sociais</h4></div><p>O corpo como conteúdo digital. Filtros e algoritmos ditam novos padrões.</p><span class="impact-tag">Visibilidade</span><span class="impact-tag">Fama</span></div></div>
-        <div class="impact-card reveal reveal-delay-2"><div class="impact-image"><img src="https://i.redd.it/yrba07jo2wy81.jpg" alt="Beleza" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg></div><h4>Diversidade</h4></div><p>Revolução contra os padrões únicos. O corpo como território de liberdade.</p><span class="impact-tag">Liberdade</span><span class="impact-tag">Autoestima</span></div></div>
-        <div class="impact-card reveal reveal-delay-3"><div class="impact-image"><img src="https://criticalhits.com.br/wp-content/uploads/2025/06/20240304-one-piece-vegapunk.webp" alt="Biohacking" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div><h4>Biohacking</h4></div><p>Implantes e melhorias tecnológicas. O corpo como projeto de engenharia.</p><span class="impact-tag">Evolução</span><span class="impact-tag">Poder</span></div></div>
-        <div class="impact-card reveal reveal-delay-4"><div class="impact-image"><img src="https://criticalhits.com.br/wp-content/uploads/2019/07/Screenshot_20180825-043637_YouTube.jpg" alt="Identidade" loading="lazy"></div><div class="impact-body"><div class="impact-header"><div class="impact-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg></div><h4>Identidade Fluida</h4></div><p>Além do binário. O corpo deixa de ser um destino fixo para se tornar uma escolha.</p><span class="impact-tag">Gênero</span><span class="impact-tag">Expressão</span></div></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Conclusion -->
-  <section class="conclusion" id="conclusao">
-    <div class="container">
-      <div class="section-label reveal">O Grande Tesouro</div>
-      <blockquote class="conclusion-quote reveal reveal-delay-1">"O corpo humano é o primeiro mapa que possuímos. Nele, cada cicatriz é uma ilha visitada, cada músculo é um mar navegado e cada gesto é um vento que nos leva para frente."</blockquote>
-      <p class="conclusion-divider reveal reveal-delay-2"></p>
-    </div>
-  </section>
-
-  <!-- Team - WANTED POSTERS (3 COLUNAS FORÇADAS) -->
-  <section class="section" id="equipe">
-    <div class="container">
-      <div class="section-header reveal">
-        <div class="section-label">A Tripulação</div>
-        <h2 class="section-title">Os <em>Procurados</em></h2>
-        <p class="section-desc">Pesquisadores com recompensas altas por conhecimento.</p>
+    <!-- Conclusion -->
+    <section class="conclusion" id="conclusao">
+      <div class="container">
+        <div class="section-label reveal">O Grande Tesouro</div>
+        <blockquote class="conclusion-quote reveal reveal-delay-1">"O corpo humano é o primeiro mapa que possuímos. Nele, cada cicatriz é uma ilha visitada, cada músculo é um mar navegado e cada gesto é um vento que nos leva para frente."</blockquote>
+        <p class="conclusion-divider reveal reveal-delay-2"></p>
       </div>
-      <div class="team-grid">
-        <div class="team-card reveal reveal-delay-1"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="luan.jpeg" alt="Luan Dhony"></div><h4>Luan Dhony</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.500.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-2"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="gabriel.jpeg" alt="Gabriel Barbosa"></div><h4>Gabriel Barbosa</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.450.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-3"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="hevelin.jpeg" alt="Hevelin Rocha"></div><h4>Hevelin Rocha</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.400.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-4"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="cecilia.jpeg" alt="Cecilia Moura"></div><h4>Cecilia Moura</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.200.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-5"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="daniella.jpeg" alt="Daniella Moraes"></div><h4>Daniella Moraes</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.100.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-6"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="nophoto.jpg" alt="Larissa Rigis"></div><h4>Larissa Rigis</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.000.000.000</span></div></div>
-        <div class="team-card reveal reveal-delay-1"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="maria.jpeg" alt="Maria Fernanda"></div><h4>Maria Fernanda</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 900.000.000</span></div></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Lightbox -->
-  <div class="lightbox" id="lightbox"><div class="lightbox-close" id="lightboxClose">&times;</div><div class="lightbox-content"><img src="" alt="" id="lightboxImage"><h3 class="lightbox-title" id="lightboxTitle"></h3><p class="lightbox-text" id="lightboxText"></p></div></div>
+    <!-- Team - WANTED POSTERS -->
+    <section class="section" id="equipe">
+      <div class="container">
+        <div class="section-header reveal">
+          <div class="section-label">A Tripulação</div>
+          <h2 class="section-title">Os <em>Procurados</em></h2>
+          <p class="section-desc">Pesquisadores com recompensas altas por conhecimento.</p>
+        </div>
+        <div class="team-grid">
+          <div class="team-card reveal reveal-delay-1"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="luan.jpeg" alt="Luan Dhony"></div><h4>Luan Dhony</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.500.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-2"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="gabriel.jpeg" alt="Gabriel Barbosa"></div><h4>Gabriel Barbosa</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.450.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-3"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="hevelin.jpeg" alt="Hevelin Rocha"></div><h4>Hevelin Rocha</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.400.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-4"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="cecilia.jpeg" alt="Cecilia Moura"></div><h4>Cecilia Moura</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.200.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-5"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="daniella.jpeg" alt="Daniella Moraes"></div><h4>Daniella Moraes</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.100.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-6"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="nophoto.jpg" alt="Larissa Rigis"></div><h4>Larissa Rigis</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 1.000.000.000</span></div></div>
+          <div class="team-card reveal reveal-delay-1"><div class="wanted-header"><h3>WANTED</h3><span class="wanted-sub">DEAD OR ALIVE</span></div><div class="team-poster-body"><div class="team-avatar"><img src="maria.jpeg" alt="Maria Fernanda"></div><h4>Maria Fernanda</h4><span class="bounty-label">RECOMPENSA</span><span class="team-bounty">฿ 900.000.000</span></div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox"><div class="lightbox-close" id="lightboxClose">&times;</div><div class="lightbox-content"><img src="" alt="" id="lightboxImage"><h3 class="lightbox-title" id="lightboxTitle"></h3><p class="lightbox-text" id="lightboxText"></p></div></div>
+  </div> <!-- Fim do Main Content -->
 
   <script>
+    // --- LÓGICA DO BLOQUEADOR MOBILE ---
+    function forceEntry() {
+      document.getElementById('mobileBlocker').style.display = 'none';
+      document.getElementById('main-content').style.display = 'block';
+      document.body.style.overflow = 'auto';
+    }
+
     // --- MUSIC CONTROL ---
     const musicBtn = document.getElementById('musicBtn');
     const bgMusic = document.getElementById('bgMusic');
