@@ -9,7 +9,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=IM+Fell+English:ital@0;1&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <style>
     :root {
-      /* Paleta One Piece / Pirata (ORIGINAL) */
+      /* Paleta One Piece / Pirata */
       --op-deep-sea: #050a14;
       --op-ocean: #0d1b33;
       --op-red: #D32F2F;
@@ -51,7 +51,7 @@
       pointer-events: none;
     }
 
-    /* --- LOADER ORIGINAL --- */
+    /* --- LOADER --- */
     .loader {
       position: fixed; inset: 0; background: radial-gradient(circle at center, #1a237e 0%, #050a14 100%);
       z-index: 9999; display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -328,15 +328,40 @@
 
     /* --- TEAM - WANTED POSTERS --- */
     .team-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 4rem; justify-items: center;
+      display: grid; grid-template-columns: repeat(3, 1fr); /* PC Padrão: 3 Colunas */
+      gap: 2rem; justify-items: center;
     }
-    @media (min-width: 700px) { .team-grid { grid-template-columns: repeat(3, 1fr); } }
+    
+    @media (max-width: 600px) {
+        /* Forçar 3 Colunas no Mobile conforme pedido */
+        .team-grid { 
+            grid-template-columns: repeat(3, 1fr) !important; 
+            gap: 0.5rem; /* Reduzir gap para caber */
+        }
+
+        /* Ajustar o cartaz para caber na coluna estreita */
+        .team-card {
+            width: 100%;
+            max-width: 100%; /* Remove limite para ocupar a célula */
+            transform: scale(0.85) rotate(var(--rot, 0deg)); /* Escala para baixo para caber tudo */
+        }
+        .team-card:hover { transform: scale(0.9) rotate(0); }
+
+        /* Reduzir fontes para não estourar o cartaz menor */
+        .wanted-header h3 { font-size: 2rem; line-height: 0.8; }
+        .wanted-sub { font-size: 0.5rem; padding: 1px 0; }
+        .team-poster-body { padding: 0.2rem; }
+        .team-avatar { margin-bottom: 0.2rem; padding: 2px; }
+        .team-card h4 { font-size: 0.9rem; margin-bottom: 0.1rem; }
+        .bounty-label { font-size: 0.5rem; }
+        .team-bounty { font-size: 0.8rem; margin-top: 0.2rem; padding: 0.2rem 0; border-width: 2px; }
+    }
 
     .team-card {
       background-color: var(--op-parchment); border: 2px solid #000; color: #000; padding: 0;
       position: relative; box-shadow: 10px 10px 0px rgba(0,0,0,0.2); transition: transform 0.3s ease, box-shadow 0.3s ease;
       font-family: 'Impact', sans-serif; overflow: hidden; transform: rotate(-2deg);
-      width: 100%; max-width: 320px;
+      max-width: 320px; /* Limite para PC */
     }
     .team-card:nth-child(even) { transform: rotate(2deg); }
     .team-card:hover { transform: scale(1.05) rotate(0); z-index: 5; box-shadow: 15px 15px 0px rgba(0,0,0,0.3); }
@@ -367,43 +392,24 @@
     .lightbox-close { position: absolute; top: 2rem; right: 2rem; font-size: 3rem; color: var(--op-gold); cursor: pointer; transition: 0.3s; }
     .lightbox-close:hover { color: var(--op-red); transform: rotate(90deg); }
 
-    /* --- MOBILE RESPONSIVE FIX (Para não bugar e manter estilo) --- */
+    /* Outros ajustes mobile gerais */
     @media (max-width: 768px) {
       .section { padding: 6rem 1.5rem; }
-      
-      /* Ajuste do Hero */
       .hero-hat-img { width: 140px; top: -10px; left: -30px; transform: rotate(-25deg) scale(0.8); }
       .hero-title { padding-left: 10px; }
-      
-      /* Botões: Empilha para não cortar */
       .hero-actions { flex-direction: column; width: 100%; }
       .btn { width: 100%; justify-content: center; }
       
-      /* TIMELINE: Volta para o padrão vertical à esquerda para garantir leitura */
+      /* Timeline: Volta à esquerda para leitura no mobile (exceto equipe que é 3 colunas) */
       .timeline::before { left: 20px; }
       .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
       .timeline-content { width: 100%; text-align: left !important; }
       .timeline-dot { left: 20px; }
-      
-      /* TEAM: 1 Coluna para NÃO estourar (Correção do BUG), mas cartaz fica largo */
-      .team-grid { 
-        grid-template-columns: 1fr !important; 
-        gap: 3rem 1rem;
-      }
-      /* Faz o cartaz ocupar quase toda a largura do celular, mantendo a grandeza */
-      .team-card { 
-        max-width: 100%; 
-        width: 100%; 
-      }
-      .team-avatar { max-width: 200px; } 
-      .team-bounty { font-size: 1.8rem; }
-      .wanted-header h3 { font-size: 2.5rem; }
-      .team-card h4 { font-size: 1.8rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Audio Element -->
+  <!-- Audio Element - ARQUIVO CORRETO: liberation.mp4 -->
   <audio id="bgMusic" loop>
     <source src="liberation.mp4" type="audio/mp4">
   </audio>
@@ -573,7 +579,7 @@
     </div>
   </section>
 
-  <!-- Team - WANTED POSTERS -->
+  <!-- Team - WANTED POSTERS (3 COLUNAS FORÇADAS) -->
   <section class="section" id="equipe">
     <div class="container">
       <div class="section-header reveal">
@@ -597,7 +603,7 @@
   <div class="lightbox" id="lightbox"><div class="lightbox-close" id="lightboxClose">&times;</div><div class="lightbox-content"><img src="" alt="" id="lightboxImage"><h3 class="lightbox-title" id="lightboxTitle"></h3><p class="lightbox-text" id="lightboxText"></p></div></div>
 
   <script>
-    // --- MUSIC CONTROL (COM TRATAMENTO DE ERRO) ---
+    // --- MUSIC CONTROL ---
     const musicBtn = document.getElementById('musicBtn');
     const bgMusic = document.getElementById('bgMusic');
     let isPlaying = false;
@@ -608,19 +614,14 @@
         musicBtn.classList.remove('playing');
         musicBtn.classList.add('paused');
       } else {
-        // Tenta tocar e captura o erro se não funcionar
         var playPromise = bgMusic.play();
-        
         if (playPromise !== undefined) {
           playPromise.then(_ => {
-            // Reprodução iniciada
             musicBtn.classList.remove('paused');
             musicBtn.classList.add('playing');
-          })
-          .catch(error => {
-            // Reprodução foi impedida
+          }).catch(error => {
             console.error("Erro no áudio:", error);
-            alert("Não foi possível tocar a música. Verifique se o arquivo 'liberation.mp4' está na mesma pasta do HTML.");
+            alert("Erro: Verifique se o arquivo 'liberation.mp4' está na pasta.");
           });
         }
       }
