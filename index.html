@@ -42,7 +42,7 @@
       font-family: 'Inter', sans-serif;
       background: var(--op-deep-sea); /* Fundo Escuro Original */
       color: var(--op-text);
-      overflow-x: hidden;
+      overflow-x: hidden; /* Previne rolagem horizontal indesejada, mas mantém layout largo */
       line-height: 1.6;
     }
 
@@ -278,14 +278,6 @@
       transition: transform 0.3s ease;
     }
     .hero-title { padding-left: 40px; }
-
-    @media (max-width: 768px) {
-      .hero-hat-img {
-        width: 140px; top: -10px; left: -30px;
-        transform: rotate(-25deg) scale(0.8);
-      }
-      .hero-title { padding-left: 10px; }
-    }
 
     .intro-character { bottom: -20px; right: -30px; width: 200px; --rot: 5deg; }
     .evo-character { top: -50px; left: -20px; width: 250px; --rot: -10deg; z-index: 20; }
@@ -1168,25 +1160,69 @@
     }
     .lightbox-close:hover { color: var(--op-red); transform: rotate(90deg); }
 
+    /* --- MOBILE FORCE DESKTOP STYLE --- */
     @media (max-width: 600px) {
-      .section { padding: 6rem 1.5rem; }
-      .hero-actions { flex-direction: column; width: 100%; }
-      .btn { width: 100%; justify-content: center; }
+      /* Ajuste Geral: Apenas reduz o padding para caber na tela, mas mantém estrutura */
+      .section { padding: 6rem 1rem; }
       
-      /* Timeline Mobile Fix */
-      .timeline::before { left: 20px; }
-      .timeline-item, .timeline-item:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
-      .timeline-content { width: 100%; text-align: left !important; }
-      .timeline-dot { left: 20px; }
+      /* Hero: Mantém layout lado a lado, apenas reduz tamanho do chapéu */
+      .hero-hat-img {
+        width: 120px; top: -10px; left: -30px;
+        transform: rotate(-25deg) scale(0.8);
+      }
+      .hero-title { padding-left: 10px; font-size: 3.5rem; } /* Tamanho fixo para não ficar desproporcional */
       
-      /* Team Grid Mobile Fix - Força 1 coluna para não cortar */
+      /* Botões: Mantém lado a lado */
+      .hero-actions { 
+        flex-direction: row; 
+        flex-wrap: wrap; 
+        gap: 1rem;
+      }
+      .btn { 
+        padding: 0.8rem 1.5rem; /* Ligeiramente menor */
+        font-size: 0.8rem; 
+        width: auto; 
+        flex: 1 1 auto; /* Permite encolher mas manter lado a lado */
+        justify-content: center;
+      }
+
+      /* TIMELINE: MANTÉM CENTRALIZADO COMO NO PC */
+      .timeline::before { 
+        left: 50%; 
+        transform: translateX(-50%);
+      }
+      .timeline-item, .timeline-item:nth-child(even) { 
+        flex-direction: row; /* Mantém linha */
+        align-items: center; 
+      }
+      /* Pequeno ajuste para não quebrar texto em telas mt pequenas */
+      .timeline-content { 
+        width: 42%; /* Ligeiramente menor */
+        padding: 1rem; 
+      }
+      .timeline-item:nth-child(odd) .timeline-content { text-align: right; }
+      .timeline-item:nth-child(even) .timeline-content { text-align: left; }
+      
+      .timeline-dot { 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+      }
+      /* Ajuste de fonte para caber */
+      .timeline-year { font-size: 1.2rem; }
+      
+      /* TEAM GRID: MANTÉM 2 COLUNAS (COMO PC PEQUENO) */
       .team-grid { 
-        grid-template-columns: 1fr !important; 
-        gap: 3rem 1rem;
+        grid-template-columns: repeat(2, 1fr) !important; 
+        gap: 1.5rem 0.5rem; /* Reduz gap para caber */
       }
       .team-avatar { max-width: 100%; } 
-      .team-bounty { font-size: 1.8rem; } 
-      .team-card h4 { font-size: 1.8rem; }
+      .team-bounty { font-size: 1.2rem; } /* Reduz fonte da recompensa para caber */
+      .team-card h4 { font-size: 1.5rem; }
+      .wanted-header h3 { font-size: 2.5rem; }
+      
+      /* COMUNICAÇÃO E IMPACTO: Mantém Grid se possível */
+      .comm-grid { grid-template-columns: repeat(2, 1fr); }
+      .impact-grid { grid-template-columns: 1fr; } /* Aqui stacks pq é muito texto */
     }
   </style>
 </head>
